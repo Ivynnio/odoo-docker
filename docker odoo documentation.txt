@@ -1,0 +1,21 @@
+Ivynnio - Docker Odoo Documentation
+
+#Delete file docker
+	- docker exec -it -u root odoo15 /bin/bash  (masuk ke folder odoo)
+	- cd [Tujuan folder] 
+	- rm -r [Nama File yang ingin dihapus]
+	- ctrl+d [Exit root]
+	- docker restart odoo15[nama container]
+
+
+#Copy folder ke dalam odoo
+	- docker cp [nama folder] odoo15[nama container]:[tujuan]/
+		### contoh (docker cp bi_hr_payroll odoo15:mnt/extra-addons/)
+
+
+#Install odoo
+	- docker-compose up -d
+
+#install odoo with option
+	- docker-compose -f [nama file] up -d
+		### contoh (docker-compose -f docker15.yaml up -d)
