@@ -1,0 +1,30 @@
+version: "3"
+services:
+  odoo:
+    container_name: odoo15
+    image: odoo:15
+    ports:
+      - 8060:8069
+    depends_on:
+      - db
+    environment:
+      - HOST=db
+      - USER=admin
+      - PASSWORD=admin
+    volumes:
+      - odoo-odoo15:/var/bin/odoo/data
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: admin 
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    ports:
+      - 6060:5432
+    volumes:
+      - pg-odoo15:/var/bin/postgresql/data
+volumes:
+  pg-odoo15:
+    driver: local
+  odoo-odoo15:
+    driver: local

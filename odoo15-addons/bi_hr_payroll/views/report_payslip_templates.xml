@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payslip">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <style>
+                            .tableM, .thM, .tdM {
+                                border: 1px solid black;
+                                text-align: center;
+                                padding: 5px;
+                            }
+                            .tableM {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-bottom: 20px;
+                            }
+                            .thM {
+                                background-color: #000080; /* Biru Tua */
+                                color: white; /* Teks Putih */
+                            }
+                            .text-right {
+                                text-align: right;
+                            }
+                            .header-title {
+                                text-align: center;
+                                margin-bottom: 20px;
+                                margin-top: 0; /* Tambahkan ini untuk mengurangi margin atas */
+                                padding-top: 0; /* Tambahkan ini untuk mengurangi padding atas */
+                            }
+                            .total-section {
+                                margin-top: 20px;
+                            }
+                            .account-info {
+                                margin-top: 20px;
+                                margin-bottom: 20px;
+                            }
+                            .account-info td {
+                                padding: 5px;
+                            }
+                        </style>
+
+                        <div class="header-title">
+                            <h2>Employee Payslip Data Report</h2>
+                            <p>Salary Slip of <t t-esc="o.employee_id.name"/></p>
+                            <br/><br/><br/>
+                        </div>
+
+                        <table style="width: 100%; margin-bottom: 20px;">
+                            <tr>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Nama : </strong>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <span t-field="o.employee_id"/>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Tipe Kontrak : </strong>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <span t-field="o.contract_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Jabatan : </strong>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <span t-field="o.employee_id.job_id"/>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Tanggal Masuk : </strong>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <span t-field="o.date_from"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Departemen : </strong>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <span t-field="o.employee_id.department_id"/>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Lokasi : </strong>
+                                </td>
+                                <td style="width: 25%; text-align: left;">
+                                    <span t-field="o.employee_id.work_location_id"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="tableM">
+                            <thead>
+                                <tr>
+                                    <th class="thM">PENGHASILAN</th>
+                                    <th class="thM">POTONGAN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="tdM">
+                                        <div>
+                                            <span>Gaji Bulanan: Rp. </span>
+                                            <t t-set="basic" t-value="o.line_ids.filtered(lambda line: line.code == 'BASIC' and line.appears_on_payslip).total"/>
+                                            <span t-esc="basic or 0"/>
+                                        </div>
+                                        <div>
+                                            <span>Uang Makan: Rp. </span>
+                                            <t t-set="makan" t-value="o.line_ids.filtered(lambda line: line.code == 'UMKN' and line.appears_on_payslip).total"/>
+                                            <span t-esc="makan or 0"/>
+                                        </div>
+                                        <div>
+                                            <span>Tunjangan Transportasi: Rp. </span>
+                                            <t t-set="transport" t-value="o.line_ids.filtered(lambda line: line.code == 'TTR' and line.appears_on_payslip).total"/>
+                                            <span t-esc="transport or 0"/>
+                                        </div>
+                                        <div>
+                                            <span>Tunjangan Perumahan: Rp. </span>
+                                            <t t-set="perumahan" t-value="o.line_ids.filtered(lambda line: line.code == 'TPR' and line.appears_on_payslip).total"/>
+                                            <span t-esc="perumahan or 0"/>
+                                        </div>
+                                    </td>
+                                    <td class="tdM">
+                                        <div>
+                                            <span>Uang Makan: Rp. </span>
+                                            <t t-set="makan_pot" t-value="o.line_ids.filtered(lambda line: line.code == 'UMKN' and line.appears_on_payslip).total"/>
+                                            <span t-esc="makan_pot or 0"/>
+                                        </div>
+                                        <div>
+                                            <span>Tunjangan Transportasi: Rp. </span>
+                                            <t t-set="transport_pot" t-value="o.line_ids.filtered(lambda line: line.code == 'TTR' and line.appears_on_payslip).total"/>
+                                            <span t-esc="transport_pot or 0"/>
+                                        </div>
+                                        <div>
+                                            <span>Tunjangan Perumahan: Rp. </span>
+                                            <t t-set="perumahan_pot" t-value="o.line_ids.filtered(lambda line: line.code == 'TPR' and line.appears_on_payslip).total"/>
+                                            <span t-esc="perumahan_pot or 0"/>
+                                        </div>
+                                        <div>
+                                            <span>PPH21: Rp. </span>
+                                            <t t-set="pph21" t-value="o.line_ids.filtered(lambda line: line.code == 'PPH' and line.appears_on_payslip).total"/>
+                                            <span t-esc="pph21 or 0"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tdM">
+                                        <t t-foreach="o.line_ids.filtered(lambda line: line.code == 'GROSS' and line.appears_on_payslip)" t-as="line">
+                                            <div>
+                                                <strong>Total Penghasilan: Rp. </strong><span t-field="line.total"/>
+                                            </div>
+                                        </t>
+                                    </td>
+                                    <td class="tdM">
+                                        <t t-foreach="o.line_ids.filtered(lambda line: line.code == 'PTG' and line.appears_on_payslip)" t-as="line">
+                                            <div>
+                                                <strong>Total Potongan: Rp. </strong><span t-field="line.total"/>
+                                            </div>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="total-section">
+                            <t t-foreach="o.line_ids.filtered(lambda line: line.code == 'NET' and line.appears_on_payslip)" t-as="line">
+                                <div>
+                                    <strong>Total Penghasilan yang Diterima: Rp. </strong><span t-field="line.total"/>
+                                </div>
+                            </t>
+                        </div>
+<br/><br/>
+                        <table class="account-info" style="width: 100%;">
+                            <tr>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Nama Pemegang Rekening: </strong>
+                                </td>
+                                <td style="width: 75%; text-align: left;">
+                                    <span t-field="o.employee_id.bank_account_id.acc_holder_name"/>
+                                        <t t-if="not o.employee_id.bank_account_id.acc_holder_name">
+                                            Data belum di isi
+                                        </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Nama Bank: </strong>
+                                </td>
+                                <td style="width: 75%; text-align: left;">
+                                    <span t-field="o.employee_id.bank_account_id.bank_id"/>
+                                        <t t-if="not o.employee_id.bank_account_id.bank_id">
+                                            Data belum di isi
+                                        </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 25%; text-align: left;">
+                                    <strong>Nomor Rekening : </strong>
+                                </td>
+                                <td style="width: 75%; text-align: left;">
+                                    <span t-field="o.employee_id.bank_account_id.acc_number"/>
+                                        <t t-if="not o.employee_id.bank_account_id.acc_number">
+                                            Data belum di isi
+                                        </t>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                        <br/>                     
+                            <p>- Upah Pokok dibayarkan setiap 30 hari sekali</p>
+                            <p>- Tunjangan Transportasi(uang bbm, uang sewa motor) sudah dibayarkan tiap akhir minggu</p>
+                            <p>- Tunjangan Perumahan(uang sewa tempat tinggal, kos/apartemen) sudah dibayarkan tiap akhir bulan, kecuali rumah milik</p>
+                            <p>- Uang makan sudah dibayarkan tiap hari minggu</p>
+                        </div>
+
+                        <div class="text-right">
+                            <p>Surabaya, <span t-esc="datetime.datetime.now().strftime('%d %B %Y')"/></p>
+                            <br/><br/><br/>
+                            Diterima,
+                            <br/>
+                            <p><span t-field="o.employee_id.name"/></p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
